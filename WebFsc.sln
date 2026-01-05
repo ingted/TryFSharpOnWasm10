@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26124.0
+# Visual Studio Version 18
+VisualStudioVersion = 18.3.11312.210 d18.3
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".paket", ".paket", "{B356FE43-BEAF-40B2-BAAC-BC93E461E796}"
 	ProjectSection(SolutionItems) = preProject
@@ -15,6 +15,8 @@ EndProject
 Project("{6EC3EE1D-3C4E-46DD-8F32-0CC8E7565705}") = "WebFsc.Client", "src\WebFsc.Client\WebFsc.Client.fsproj", "{1481BBD6-A6DA-4912-A03A-134880D14701}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "WebFsc.Env", "src\WebFsc.Env\WebFsc.Env.fsproj", "{EEBB10CD-2DB5-42AC-BE5B-1532B2278F88}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Bolero.FSharp.Compiler.Service", "..\Bolero.FCS.Build\src\Compiler\Bolero.FSharp.Compiler.Service.fsproj", "{7101A311-728B-535E-0067-46EBDB84C015}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -62,6 +64,18 @@ Global
 		{EEBB10CD-2DB5-42AC-BE5B-1532B2278F88}.Release|x64.Build.0 = Release|Any CPU
 		{EEBB10CD-2DB5-42AC-BE5B-1532B2278F88}.Release|x86.ActiveCfg = Release|Any CPU
 		{EEBB10CD-2DB5-42AC-BE5B-1532B2278F88}.Release|x86.Build.0 = Release|Any CPU
+		{7101A311-728B-535E-0067-46EBDB84C015}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7101A311-728B-535E-0067-46EBDB84C015}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7101A311-728B-535E-0067-46EBDB84C015}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{7101A311-728B-535E-0067-46EBDB84C015}.Debug|x64.Build.0 = Debug|Any CPU
+		{7101A311-728B-535E-0067-46EBDB84C015}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7101A311-728B-535E-0067-46EBDB84C015}.Debug|x86.Build.0 = Debug|Any CPU
+		{7101A311-728B-535E-0067-46EBDB84C015}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7101A311-728B-535E-0067-46EBDB84C015}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7101A311-728B-535E-0067-46EBDB84C015}.Release|x64.ActiveCfg = Release|Any CPU
+		{7101A311-728B-535E-0067-46EBDB84C015}.Release|x64.Build.0 = Release|Any CPU
+		{7101A311-728B-535E-0067-46EBDB84C015}.Release|x86.ActiveCfg = Release|Any CPU
+		{7101A311-728B-535E-0067-46EBDB84C015}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -70,6 +84,7 @@ Global
 		{45F6C463-59AF-4128-BAFA-FBF88A54C7AD} = {87F6C079-CBD7-4866-BDEB-CBDEA9E51D2A}
 		{1481BBD6-A6DA-4912-A03A-134880D14701} = {87F6C079-CBD7-4866-BDEB-CBDEA9E51D2A}
 		{EEBB10CD-2DB5-42AC-BE5B-1532B2278F88} = {87F6C079-CBD7-4866-BDEB-CBDEA9E51D2A}
+		{7101A311-728B-535E-0067-46EBDB84C015} = {87F6C079-CBD7-4866-BDEB-CBDEA9E51D2A}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8CFD6033-FB8D-48BE-9628-9D83DC023CAB}

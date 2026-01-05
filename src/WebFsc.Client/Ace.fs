@@ -20,9 +20,9 @@
 module WebFsc.Client.Ace
 
 open System.Threading.Tasks
-open Microsoft.FSharp.Compiler.SourceCodeServices
+//open Microsoft.FSharp.Compiler.SourceCodeServices
 open Microsoft.JSInterop
-
+open FSharp.Compiler.Diagnostics
 /// Highlight a warning or an error.
 /// This combines an Ace Marker (highlight a range of code)
 /// and an Ace Annotation (icon in the margin with text on hover).
@@ -43,7 +43,7 @@ type Annotation =
     }
 
 /// Set the currently displayed annotations.
-let SetAnnotations (js: IJSInProcessRuntime) (messages: FSharpErrorInfo[]) =
+let SetAnnotations (js: IJSInProcessRuntime) (messages: FSharpDiagnostic[]) =
     let annotations = messages |> Array.map (fun info ->
         {
             row = info.StartLineAlternate - 1
@@ -53,14 +53,14 @@ let SetAnnotations (js: IJSInProcessRuntime) (messages: FSharpErrorInfo[]) =
             text = info.Message
             ``type`` =
                 match info.Severity with
-                | FSharpErrorSeverity.Warning -> "warning"
-                | FSharpErrorSeverity.Error -> "error"
+                | FSharpDiagnosticSeverity.Warning -> "warning"
+                | FSharpDiagnosticSeverity.Error -> "error"
         }
     )
     js.Invoke<unit>("WebFsc.setAnnotations", annotations)
 
 /// Focus the editor and select the code range of the given message.
-let SelectMessage (js: IJSInProcessRuntime) (info: FSharpErrorInfo) =
+let SelectMessage (js: IJSInProcessRuntime) (info: FSharpDiagnostic) =
     js.Invoke<unit>("WebFsc.selectRange",
         info.StartLineAlternate - 1, info.StartColumn,
         info.EndLineAlternate - 1, info.EndColumn

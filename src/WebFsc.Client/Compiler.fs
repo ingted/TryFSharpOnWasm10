@@ -17,19 +17,22 @@
 // $end{copyright}
 
 namespace WebFsc.Client
-
+open FSharp.Compiler.CodeAnalysis
+open FSharp.Compiler.Diagnostics
+open FSharp.Compiler.EditorServices
 open System
 open System.IO
 open System.Reflection
-open Microsoft.FSharp.Compiler
-open Microsoft.FSharp.Compiler.SourceCodeServices
+//open Microsoft.FSharp.Compiler
+//open Microsoft.FSharp.Compiler.SourceCodeServices
 open Microsoft.JSInterop
+open FSharp.Compiler.Symbols
 
 type CompilerStatus =
     | Standby
     | Running
-    | Failed of FSharpErrorInfo[]
-    | Succeeded of string * FSharpErrorInfo[]
+    | Failed of FSharpDiagnostic[]
+    | Succeeded of string * FSharpDiagnostic[]
 
 /// Cache the parse and check results for a given file.
 type FileResults =
@@ -103,7 +106,7 @@ module Compiler =
     /// Create a compiler instance.
     /// </summary>
     /// <param name="source">The initial contents of Main.fs</param>
-    let Create source = async {
+    let Create (source:string) = async {
         let checker = FSharpChecker.Create(keepAssemblyContents = true)
         let options = Options checker outFile
         File.WriteAllText(inFile, source)
@@ -125,9 +128,9 @@ module Compiler =
     /// Check whether compilation has failed.
     /// </summary>
     /// <param name="errors">The messages returned by the compiler</param>
-    let IsFailure (errors: seq<FSharpErrorInfo>) =
+    let IsFailure (errors: seq<FSharpDiagnostic>) =
         errors
-        |> Seq.exists (fun (x: FSharpErrorInfo) -> x.Severity = FSharpErrorSeverity.Error)
+        |> Seq.exists (fun (x: FSharpDiagnostic) -> x.Severity = FSharpDiagnosticSeverity.Error)
 
     /// <summary>
     /// Turn a file in the virtual filesystem into a browser download.
@@ -178,7 +181,7 @@ module Compiler =
     /// </summary>
     /// <param name="checkRes">The compiler check results</param>
     /// <param name="errors">The parse and check messages</param>
-    let filterNoMainMessage checkRes (errors: FSharpErrorInfo[]) =
+    let filterNoMainMessage checkRes (errors: FSharpDiagnostic[]) =
         if findAsyncMain checkRes then
             errors |> Array.filter (fun m -> m.ErrorNumber <> 988)
         else
@@ -188,6 +191,7 @@ module Compiler =
     let checkDelay = Delayer(500)
 
 open Compiler
+open FSharp.Compiler.EditorServices
 
 type Compiler with
 
@@ -225,7 +229,7 @@ type Compiler with
     /// </summary>
     /// <param name="source">The source of Main.fs</param>
     /// <param name="dispatch">The callback to dispatch the results</param>
-    member comp.TriggerCheck(source: string, dispatch: Compiler * FSharpErrorInfo[] -> unit) =
+    member comp.TriggerCheck(source: string, dispatch: Compiler * FSharpDiagnostic[] -> unit) =
         checkDelay.Trigger(async {
             let! parseRes, checkRes = comp.Checker.ParseAndCheckFileInProject(inFile, 0, source, comp.Options)
             let checkRes =

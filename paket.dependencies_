@@ -1,0 +1,20 @@
+version 6.0.0
+source M:\git\Bolero.FCS.Build\packages
+source https://api.nuget.org/v3/index.json
+source https://ci.appveyor.com/nuget/bolero
+source https://ci.appveyor.com/nuget/bolero-fsharp-data
+source https://daily.websharper.com/nuget # Bolero.FSharp.Compiler.Service is published here
+storage: none
+framework: netstandard2.1, netcoreapp3.1
+
+nuget Bolero.FSharp.Compiler.Service 1.0.0
+nuget FSharp.DependencyManager.Nuget 1.0.0
+// nuget Bolero 0.23.52
+// nuget Bolero.Server 0.23.52
+// nuget Bolero.HotReload 0.22.6
+// nuget Bolero.HotReload.Server 0.22.6
+// nuget FSharp.Core
+// nuget Microsoft.AspNetCore.Components.WebAssembly.Build
+// nuget Microsoft.AspNetCore.Components.WebAssembly.Server
+// nuget Bolero.FSharp.Data >= 3.0 prerelease
+// nuget BuildWebCompiler

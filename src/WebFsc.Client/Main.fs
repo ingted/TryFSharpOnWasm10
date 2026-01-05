@@ -21,17 +21,19 @@ module WebFsc.Client.Main
 
 open System
 open System.Net.Http
-open Microsoft.FSharp.Compiler.SourceCodeServices
+//open Microsoft.FSharp.Compiler.SourceCodeServices
+open FSharp.Compiler.Diagnostics
 open Elmish
 open Bolero
 open Bolero.Html
+open FSharp.Compiler.EditorServices
 
 type Model =
     {
         Text: string
         Compiler: Compiler
         Executor: Executor
-        Messages: FSharpErrorInfo[]
+        Messages: FSharpDiagnostic[]
         Exception: option<exn>
         SelectedSnippet: string
         LatestCompleter: option<IDisposable>
@@ -67,11 +69,11 @@ type Message =
     | Compile
     | Compiled of Compiler
     | RunFinished of Executor
-    | Checked of Compiler * FSharpErrorInfo[]
-    | Complete of int * int * string * (FSharpDeclarationListItem[] -> IDisposable)
+    | Checked of Compiler * FSharpDiagnostic[]
+    | Complete of int * int * string * (DeclarationListItem[] -> IDisposable)
     | CompletionSent of IDisposable
     | Error of exn
-    | SelectMessage of FSharpErrorInfo
+    | SelectMessage of FSharpDiagnostic
     | LoadSnippet of string
     | SnippetLoaded of string
 
@@ -144,7 +146,7 @@ let update js (http: HttpClient) message model =
 
 type Main = Template<"main.html">
 
-let compilerMessage (msg: FSharpErrorInfo) dispatch =
+let compilerMessage (msg: FSharpDiagnostic) dispatch =
     Main.CompilerMessage()
         .Severity(string msg.Severity)
         .StartLine(string msg.StartLineAlternate)

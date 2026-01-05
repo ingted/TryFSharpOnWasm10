@@ -20,8 +20,9 @@ namespace WebFsc.Client
 
 open System
 open System.Threading.Tasks
-open Microsoft.FSharp.Compiler.SourceCodeServices
+//open Microsoft.FSharp.Compiler.SourceCodeServices
 open Microsoft.JSInterop
+open FSharp.Compiler.EditorServices
 
 type Completion =
     {
@@ -33,7 +34,7 @@ type Completion =
     }
 
 /// A set of autocomplete items, used to cache computed tooltips.
-and CompletionCache(items: FSharpDeclarationListItem[], js: IJSInProcessRuntime) =
+and CompletionCache(items: DeclarationListItem[], js: IJSInProcessRuntime) =
 
     let tooltips = Array.create items.Length None
 
@@ -45,15 +46,18 @@ and CompletionCache(items: FSharpDeclarationListItem[], js: IJSInProcessRuntime)
         match tooltips.[index] with
         | None ->
             async {
-                let! (FSharpToolTipText ttitems) = items.[index].DescriptionTextAsync
+                // 1. 注意 TooltipText 的大小寫（現在通常是小寫 t）
+                let! (ToolTipText ttitems) = items.[index].DescriptionTextAsync
                 let tt = String.concat "\n" <| seq {
                     for ttitem in ttitems do
                         match ttitem with
-                        | FSharpToolTipElement.CompositionError e -> yield e
-                        | FSharpToolTipElement.None -> ()
-                        | FSharpToolTipElement.Group ttelts ->
+                        // 2. FSharpToolTipElement -> TooltipElement
+                        | ToolTipElement.CompositionError e -> yield e
+                        | ToolTipElement.None -> ()
+                        | ToolTipElement.Group ttelts ->
                             for ttelt in ttelts do
-                                yield ttelt.MainDescription
+                                // 3. MainDescription 現在是 TaggedText[]，需要提取 Text 後合併
+                                yield ttelt.MainDescription |> Array.map (fun t -> t.Text) |> String.concat ""
                 }
                 tooltips.[index] <- Some tt
                 js.Invoke("WebFsc.updateTooltip")
@@ -63,7 +67,7 @@ and CompletionCache(items: FSharpDeclarationListItem[], js: IJSInProcessRuntime)
         | Some tt -> tt
 
 /// A wrapper object to trigger autocompletion.
-type Autocompleter(dispatch: int * int * string * (FSharpDeclarationListItem[] -> IDisposable) -> unit, js) =
+type Autocompleter(dispatch: int * int * string * (DeclarationListItem[] -> IDisposable) -> unit, js) =
 
     [<JSInvokable>]
     member this.Complete(line, col, lineText) =

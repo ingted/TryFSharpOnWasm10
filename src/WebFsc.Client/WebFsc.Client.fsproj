@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup>
-    <TargetFramework>netstandard2.1</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
     <TypeScriptToolsVersion>3.3</TypeScriptToolsVersion>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <RazorLangVersion>3.0</RazorLangVersion>
@@ -21,11 +21,15 @@
     <Content Include="main.html" />
     <None Include="paket.references" />
     <BlazorLinkerDescriptor Include="linker.xml" />
+    <PackageReference Include="Bolero" Version="0.24.39" />
+    <PackageReference Include="FSharp.Data.Http" Version="6.6.0" />
+    <PackageReference Include="Microsoft.JSInterop" Version="10.0.1" />
     <Content Update="wwwroot/*.json">
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Bolero.FCS.Build\src\Compiler\Bolero.FSharp.Compiler.Service.fsproj" />
     <ProjectReference Include="..\WebFsc.Env\WebFsc.Env.fsproj" />
   </ItemGroup>
   <Target Name="CopyCustomBlazor">
@@ -36,5 +40,5 @@
   <PropertyGroup>
     <_BlazorCopyFilesToOutputDirectoryDependsOn>$(_BlazorCopyFilesToOutputDirectoryDependsOn);CopyCustomBlazor</_BlazorCopyFilesToOutputDirectoryDependsOn>
   </PropertyGroup>
-  <Import Project="..\..\.paket\Paket.Restore.targets" />
+  <!--<Import Project="..\..\.paket\Paket.Restore.targets" />-->
 </Project>
