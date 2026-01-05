@@ -2,6 +2,7 @@ namespace WebFsc.Server
 
 open System
 open System.IO
+open System.Text.Json
 open Microsoft.AspNetCore
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Hosting
@@ -11,7 +12,6 @@ open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.FileProviders
 open Bolero
 open Bolero.Server
-open Bolero.Templating.Server
 
 type Startup() =
 
@@ -51,9 +51,39 @@ type Startup() =
                 |> Seq.tryPick tryFindBuiltWwwRoot
             defaultArg builtWwwRoot (Path.Combine(clientProjPath, "wwwroot"))
 
+    let tryFindStaticWebAssetsManifest () =
+        let objPath = Path.Combine(clientProjPath, "obj")
+        if Directory.Exists(objPath) then
+            Directory.EnumerateFiles(objPath, "staticwebassets.build.json", SearchOption.AllDirectories)
+            |> Seq.sortByDescending File.GetLastWriteTimeUtc
+            |> Seq.tryHead
+        else
+            None
+
+    let tryLoadPackageContentRoots () =
+        match tryFindStaticWebAssetsManifest () with
+        | None -> []
+        | Some manifestPath ->
+            try
+                use stream = File.OpenRead(manifestPath)
+                use doc = JsonDocument.Parse(stream)
+                doc.RootElement.GetProperty("Assets").EnumerateArray()
+                |> Seq.choose (fun asset ->
+                    let basePath = asset.GetProperty("BasePath").GetString()
+                    let contentRoot = asset.GetProperty("ContentRoot").GetString()
+                    if String.IsNullOrWhiteSpace(basePath) || String.IsNullOrWhiteSpace(contentRoot) then
+                        None
+                    elif basePath.StartsWith("_content/", StringComparison.Ordinal) || basePath = "_content" then
+                        Some (basePath, contentRoot)
+                    else
+                        None)
+                |> Seq.distinct
+                |> Seq.toList
+            with _ ->
+                []
+
     member this.ConfigureServices(services: IServiceCollection) =
         services.AddControllers() |> ignore
-        services.AddHotReload(clientProjPath) |> ignore
 
     member this.Configure(app: IApplicationBuilder, env: IWebHostEnvironment) =
         let clientWwwRoot = getClientWwwRoot()
@@ -61,13 +91,16 @@ type Startup() =
         let webRootFileProvider =
             new CompositeFileProvider(clientFileProvider, env.WebRootFileProvider)
         env.WebRootFileProvider <- webRootFileProvider
+        let packageContentRoots = tryLoadPackageContentRoots ()
 
         if not (hasBlazorFrameworkFiles clientWwwRoot) then
             Console.WriteLine(
                 "Client WebAssembly assets not found. Build WebFsc.Client to generate wwwroot/_framework or set WEBFSC_CLIENT_WWWROOT.")
+        if List.isEmpty packageContentRoots then
+            Console.WriteLine("No static web assets manifest found for client packages.")
 
         let frameworkPath = Path.Combine(clientWwwRoot, "_framework")
-        let app =
+        let app: IApplicationBuilder =
             if Directory.Exists(frameworkPath) then
                 app.UseStaticFiles(
                     StaticFileOptions(
@@ -77,13 +110,23 @@ type Startup() =
             else
                 app
 
+        let app =
+            packageContentRoots
+            |> List.fold (fun (app: IApplicationBuilder) (basePath, contentRoot) ->
+                let requestPath = PathString("/" + basePath.TrimStart('/'))
+                app.UseStaticFiles(
+                    StaticFileOptions(
+                        ContentTypeProvider = contentTypeProvider,
+                        FileProvider = new PhysicalFileProvider(contentRoot),
+                        RequestPath = requestPath))
+            ) app
+
         app.UseStaticFiles(
                 StaticFileOptions(
                     ContentTypeProvider = contentTypeProvider,
                     FileProvider = webRootFileProvider))
             .UseRouting()
             .UseEndpoints(fun endpoints ->
-                endpoints.UseHotReload()
                 endpoints.MapControllers() |> ignore
                 endpoints.MapFallbackToFile("index.html") |> ignore)
         |> ignore

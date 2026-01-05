@@ -9,8 +9,6 @@
     <None Include="paket.references" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Bolero.HotReload" Version="0.24.5" />
-    <PackageReference Include="Bolero.HotReload.Server" Version="0.24.5" />
     <PackageReference Include="Bolero.Server" Version="0.24.39" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="10.0.1" />
   </ItemGroup>
