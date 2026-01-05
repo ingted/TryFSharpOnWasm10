@@ -5,7 +5,7 @@ var e=!1;const t=async()=>WebAssembly.validate(new Uint8Array([0,97,115,109,1,0,
   "mainAssemblyName": "WebFsc.Client",
   "applicationEnvironment": "Development",
   "resources": {
-    "hash": "sha256-Znm3JF4IlBqtuifd+WUmoFl21vRFZsbC6CXS64CpxN4=",
+    "hash": "sha256-kn5wNDTc6JHblDR42okjr7CX1P6gfCKVf3XUMod92xQ=",
     "jsModuleNative": [
       {
         "name": "dotnet.native.cs8mcre4gh.js"
@@ -1064,8 +1064,8 @@ var e=!1;const t=async()=>WebAssembly.validate(new Uint8Array([0,97,115,109,1,0,
       },
       {
         "virtualPath": "FSharp.Compiler.Service.wasm",
-        "name": "FSharp.Compiler.Service.0muhhjnww3.wasm",
-        "integrity": "sha256-OALZKTlQ+mR2lOX/66t9lx++ibVPX//gjSxojYGieXc="
+        "name": "FSharp.Compiler.Service.hhn8l85uh3.wasm",
+        "integrity": "sha256-G7K2C7o9i72sgA1IWg35MaR3atTnCtx7KZ0OfPLEwlI="
       },
       {
         "virtualPath": "FSharp.DependencyManager.Nuget.wasm",
@@ -1079,15 +1079,15 @@ var e=!1;const t=async()=>WebAssembly.validate(new Uint8Array([0,97,115,109,1,0,
       },
       {
         "virtualPath": "WebFsc.Client.wasm",
-        "name": "WebFsc.Client.qswp0k4wtq.wasm",
-        "integrity": "sha256-SoIAepWajbgg5lF/sxGjXf6k5xBPx6Al2ygzyyK4NU0="
+        "name": "WebFsc.Client.ipve3n5not.wasm",
+        "integrity": "sha256-Bkf7SNtkjpMwCR3mKl/BrKWvOz2wGhTYfzwkCg4+A7M="
       }
     ],
     "pdb": [
       {
         "virtualPath": "FSharp.Compiler.Service.pdb",
-        "name": "FSharp.Compiler.Service.0mmsjslb4u.pdb",
-        "integrity": "sha256-eFR6pootRE580d7kG+pyr5Z2bQa9Mpismdo1tpIwDr0="
+        "name": "FSharp.Compiler.Service.w9biktyxjk.pdb",
+        "integrity": "sha256-lJHLEXo6/HxYP8OvoHowfD8sfreEv1AMZuAkPB+jU7k="
       },
       {
         "virtualPath": "FSharp.DependencyManager.Nuget.pdb",
@@ -1101,8 +1101,8 @@ var e=!1;const t=async()=>WebAssembly.validate(new Uint8Array([0,97,115,109,1,0,
       },
       {
         "virtualPath": "WebFsc.Client.pdb",
-        "name": "WebFsc.Client.sy4uxqazim.pdb",
-        "integrity": "sha256-pD0rdGkOaQYLIRqGfMmWitWd0G22vP/yWHrKqlBMtuQ="
+        "name": "WebFsc.Client.4tsynupyfv.pdb",
+        "integrity": "sha256-WIW94PyeDrNpNWMvxwwxNGM/uuR1EK/u170p2k6neAE="
       }
     ],
     "satelliteResources": {
