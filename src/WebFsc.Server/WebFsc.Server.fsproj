@@ -14,8 +14,5 @@
     <PackageReference Include="Bolero.Server" Version="0.24.39" />
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="10.0.1" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\WebFsc.Client\WebFsc.Client.fsproj" />
-  </ItemGroup>
   <!--<Import Project="..\..\.paket\Paket.Restore.targets" />-->
 </Project>

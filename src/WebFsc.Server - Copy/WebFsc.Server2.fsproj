@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Startup.fs" />
+    <None Include="paket.references" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Bolero.HotReload" Version="0.24.5" />
+    <PackageReference Include="Bolero.HotReload.Server" Version="0.24.5" />
+    <PackageReference Include="Bolero.Server" Version="0.24.39" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="10.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\WebFsc.Client\WebFsc.Client.fsproj" />
+  </ItemGroup>
+  <!--<Import Project="..\..\.paket\Paket.Restore.targets" />-->
+</Project>

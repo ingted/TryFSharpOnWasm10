@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <TypeScriptToolsVersion>3.3</TypeScriptToolsVersion>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <RazorLangVersion>3.0</RazorLangVersion>
+    <BoleroStripAssemblies>false</BoleroStripAssemblies>
+    <BlazorWebAssemblyEnableLinking>true</BlazorWebAssemblyEnableLinking>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Utilities.fs" />
+    <Compile Include="Executor.fs" />
+    <Compile Include="Ace.fs" />
+    <Compile Include="Compiler.fs" />
+    <Compile Include="Autocomplete.fs" />
+    <Compile Include="Main.fs" />
+    <Compile Include="App.fs" />
+    <Compile Include="Startup.fs" />
+    <None Include="linker.xml" />
+    <Content Include="main.html" />
+    <BlazorLinkerDescriptor Include="linker.xml" />
+    <PackageReference Include="Bolero" Version="0.24.39" />
+    <PackageReference Include="Bolero.FSharp.Compiler.Service" Version="1.0.0" />
+    <PackageReference Include="FSharp.Data.Http" Version="6.6.0" />
+    <Content Update="wwwroot/*.json">
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+    </Content>
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="10.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Bolero.FCS.Build\src\Compiler\Bolero.FSharp.Compiler.Service.fsproj" />
+    <ProjectReference Include="..\..\..\Bolero.FCS.Build\src\FSharp.DependencyManager.Nuget\FSharp.DependencyManager.Nuget.fsproj" />
+    <ProjectReference Include="..\WebFsc.Env\WebFsc.Env.fsproj" />
+  </ItemGroup>
+  <Target Name="CopyCustomBlazor">
+    <!-- Lightly customized version of blazor.webassembly.js.
+         Compiled from https://github.com/tarmil/blazor/tree/bolero -->
+    <Copy SourceFiles="blazor.webassembly.js" DestinationFolder="$(TargetDir)wwwroot/_framework" />
+  </Target>
+  <PropertyGroup>
+    <_BlazorCopyFilesToOutputDirectoryDependsOn>$(_BlazorCopyFilesToOutputDirectoryDependsOn);CopyCustomBlazor</_BlazorCopyFilesToOutputDirectoryDependsOn>
+  </PropertyGroup>
+</Project>
