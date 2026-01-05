@@ -10,7 +10,9 @@ open Microsoft.AspNetCore.StaticFiles
 open Microsoft.Extensions.DependencyInjection
 open Microsoft.Extensions.FileProviders
 open WebFsc
-//open Bolero.Templating.Server
+open Bolero
+open Bolero.Server
+open Bolero.Templating.Server
 
 type Startup() =
 
