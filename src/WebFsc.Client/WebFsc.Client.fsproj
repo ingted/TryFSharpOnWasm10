@@ -22,7 +22,6 @@
     <Content Include="main.html" />
     <BlazorLinkerDescriptor Include="linker.xml" />
     <PackageReference Include="Bolero" Version="0.24.39" />
-    <PackageReference Include="Bolero.FSharp.Compiler.Service" Version="1.0.0" />
     <Content Update="wwwroot/*.json">
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </Content>
@@ -30,12 +29,16 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.1" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\Bolero.FCS.Build\src\Compiler\Bolero.FSharp.Compiler.Service.fsproj" />
     <ProjectReference Include="..\WebFsc.Env\WebFsc.Env.fsproj" />
   </ItemGroup>
   <Target Name="CopyCustomBlazor">
     <!-- Lightly customized version of blazor.webassembly.js.
          Compiled from https://github.com/tarmil/blazor/tree/bolero -->
     <Copy SourceFiles="blazor.webassembly.js" DestinationFolder="$(TargetDir)wwwroot/_framework" />
+  </Target>
+  <Target Name="SyncServerWwwroot" AfterTargets="Build" Condition="'$(OS)' == 'Windows_NT'">
+    <Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -File &quot;$(ProjectDir)Sync-ServerWwwroot.ps1&quot; -Configuration $(Configuration) -TargetFramework $(TargetFramework)" />
   </Target>
   <PropertyGroup>
     <_BlazorCopyFilesToOutputDirectoryDependsOn>$(_BlazorCopyFilesToOutputDirectoryDependsOn);CopyCustomBlazor</_BlazorCopyFilesToOutputDirectoryDependsOn>

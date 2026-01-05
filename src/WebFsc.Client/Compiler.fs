@@ -84,10 +84,12 @@ module Compiler =
             "--fullpaths"
             "--warn:3"
             "--target:exe"
+            "--targetprofile:netstandard"
             inFile
             // Necessary standard library
             "-r:/tmp/FSharp.Core.dll"
             "-r:/tmp/mscorlib.dll"
+            "-r:/tmp/System.Private.CoreLib.dll"
             "-r:/tmp/netstandard.dll"
             "-r:/tmp/System.dll"
             "-r:/tmp/System.Core.dll"
@@ -106,6 +108,7 @@ module Compiler =
     let referenceFiles =
         [ "FSharp.Core.dll"
           "mscorlib.dll"
+          "System.Private.CoreLib.dll"
           "netstandard.dll"
           "System.dll"
           "System.Core.dll"

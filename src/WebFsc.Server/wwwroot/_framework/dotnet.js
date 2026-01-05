@@ -5,7 +5,7 @@ var e=!1;const t=async()=>WebAssembly.validate(new Uint8Array([0,97,115,109,1,0,
   "mainAssemblyName": "WebFsc.Client",
   "applicationEnvironment": "Development",
   "resources": {
-    "hash": "sha256-X94E8iSlJM3Hw8wOXMJ1KLuTgvfQIqxpEk9KbkHtX7M=",
+    "hash": "sha256-kh8e9nzi0yR81LN8wPsIlECQJ5DmqD8ortoqPDqgosI=",
     "jsModuleNative": [
       {
         "name": "dotnet.native.cs8mcre4gh.js"
@@ -63,11 +63,6 @@ var e=!1;const t=async()=>WebAssembly.validate(new Uint8Array([0,97,115,109,1,0,
         "integrity": "sha256-huEOK9tw4KnG+z4ZzLG/LR9br/9aSFAKz+fmblbY4Ko="
       },
       {
-        "virtualPath": "FSharp.Compiler.Service.wasm",
-        "name": "FSharp.Compiler.Service.9mo66co648.wasm",
-        "integrity": "sha256-ITjhi661/DQucvXPzFZg8dSQFPHzCvMUUS7GPm5XRGc="
-      },
-      {
         "virtualPath": "Elmish.wasm",
         "name": "Elmish.pb6cyinso1.wasm",
         "integrity": "sha256-BQUlGHF3WPAVoXCe4vRbZAZ6H+4eeTVZd/ir/VY9Q3I="
@@ -76,11 +71,6 @@ var e=!1;const t=async()=>WebAssembly.validate(new Uint8Array([0,97,115,109,1,0,
         "virtualPath": "FSharp.Core.wasm",
         "name": "FSharp.Core.eacbpf42ur.wasm",
         "integrity": "sha256-CtgE9F/W44ecav366F4IeteBzlR9bCTYekru0PyNdN8="
-      },
-      {
-        "virtualPath": "FSharp.DependencyManager.Nuget.wasm",
-        "name": "FSharp.DependencyManager.Nuget.zm4n7skj1f.wasm",
-        "integrity": "sha256-O85m9m5iZTsmdiPS8Rr8dd6x9KKa7uVpPgosaWLuJzs="
       },
       {
         "virtualPath": "FSharp.SystemTextJson.wasm",
@@ -1073,26 +1063,46 @@ var e=!1;const t=async()=>WebAssembly.validate(new Uint8Array([0,97,115,109,1,0,
         "integrity": "sha256-lgUuHy5ZKKRbgYfoW8t1tWMzuTpZuIcjJroQScqry7w="
       },
       {
+        "virtualPath": "FSharp.Compiler.Service.wasm",
+        "name": "FSharp.Compiler.Service.hi1s0goib0.wasm",
+        "integrity": "sha256-V8lsuZFKzqL0UUvi6slqAWzpiEYi27BAvEtcvw1Pk98="
+      },
+      {
+        "virtualPath": "FSharp.DependencyManager.Nuget.wasm",
+        "name": "FSharp.DependencyManager.Nuget.y1lqdghkjw.wasm",
+        "integrity": "sha256-Fmq6OexVVlAWLVyF/bgPMka95VZej0KDDJIBcIYgdak="
+      },
+      {
         "virtualPath": "WebFsc.Env.wasm",
-        "name": "WebFsc.Env.8rarynhrmm.wasm",
-        "integrity": "sha256-NF0uNAHDz40HNv7Bl54vQhkFDUxo2+857z46s/yUQSw="
+        "name": "WebFsc.Env.5b32m3b3ki.wasm",
+        "integrity": "sha256-Qa8x8CMTxrpt+5Mur0h6amjhcQwzFf0D5wfjDpp1xL0="
       },
       {
         "virtualPath": "WebFsc.Client.wasm",
-        "name": "WebFsc.Client.v78ncq7agk.wasm",
-        "integrity": "sha256-pVLvpWzkRTTsn95ZFm8tsGpqC1ka2oH7OFrZT9F12+M="
+        "name": "WebFsc.Client.rleurd3ghn.wasm",
+        "integrity": "sha256-kdt926DO46qQEp/qzK5bDPn3xU8fSATs+WPfIKYE4Ns="
       }
     ],
     "pdb": [
       {
+        "virtualPath": "FSharp.Compiler.Service.pdb",
+        "name": "FSharp.Compiler.Service.jfagkptczz.pdb",
+        "integrity": "sha256-zwDV1QIrSRxotqkCGVZKRLh/o7xl35wsu/RilaCvbs8="
+      },
+      {
+        "virtualPath": "FSharp.DependencyManager.Nuget.pdb",
+        "name": "FSharp.DependencyManager.Nuget.7ocgbfr8cd.pdb",
+        "integrity": "sha256-2SQCuMDPy+bcKBrb/hmE7A8XTjn44QvF8BajzqdM/h0="
+      },
+      {
         "virtualPath": "WebFsc.Env.pdb",
-        "name": "WebFsc.Env.pvabdrh3lw.pdb",
-        "integrity": "sha256-1VRkanYtENd8YccU1lEiaEBLYnx3x7pwbH0jwAVU/2U="
+        "name": "WebFsc.Env.4b34buvo8i.pdb",
+        "integrity": "sha256-wPyUtNLJOG1XTi57p+Sk9QJNBm0QRYTdOi5mpcp8hBI="
       },
       {
         "virtualPath": "WebFsc.Client.pdb",
-        "name": "WebFsc.Client.g8sp330oi4.pdb",
-        "integrity": "sha256-MConBFm/ajAK3wktcKQjRJaz5PjlLDbzEsZ0bojKyfA="
+        "name": "WebFsc.Client.myxt5hjw2b.pdb",
+        "integrity": "sha256-Loou1DwOpBc8njHcpdYb8+OgFpes+9EQgC8kB6GHpfk="
       }
     ],
     "satelliteResources": {
