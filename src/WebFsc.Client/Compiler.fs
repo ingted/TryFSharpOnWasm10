@@ -98,7 +98,6 @@ module Compiler =
             "-r:/tmp/System.Net.Http.dll"
             "-r:/tmp/System.Threading.dll"
             "-r:/tmp/System.Threading.Tasks.dll"
-            "-r:/tmp/FSharp.Data.dll"
             "-r:/tmp/System.Xml.Linq.dll"
             "-r:/tmp/WebFsc.Env.dll"
             "-o:" + outFile
@@ -116,7 +115,6 @@ module Compiler =
           "System.Net.Http.dll"
           "System.Threading.dll"
           "System.Threading.Tasks.dll"
-          "FSharp.Data.dll"
           "System.Xml.Linq.dll"
           "WebFsc.Env.dll" ]
 
@@ -195,11 +193,10 @@ module Compiler =
         with exn -> eprintfn "%A" exn
 
     /// <summary>
-    /// Set the HttpClient used by FSharp.Data and by user code.
+    /// Set the HttpClient used by user code via Env.Http.
     /// </summary>
     /// <param name="http"></param>
-    let SetFSharpDataHttpClient http =
-        // Set the user run time HttpClient
+    let SetEnvHttpClient http =
         Env.SetHttp http
 
     let asyncMainTypeName = "Microsoft.FSharp.Core.unit -> \

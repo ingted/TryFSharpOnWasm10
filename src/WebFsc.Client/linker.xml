@@ -4,8 +4,6 @@
   <assembly fullname="WebFsc.Client"></assembly>
   
   <!-- Assemblies needed by FCS or that we want referenced, but illink would otherwise remove -->
-  <assembly fullname="FSharp.Data"></assembly>
-  <assembly fullname="FSharp.Data.DesignTime"></assembly>
   <assembly fullname="netstandard"></assembly>
   <assembly fullname="System.Collections"></assembly>
   <assembly fullname="System.Console"></assembly>

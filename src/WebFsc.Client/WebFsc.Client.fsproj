@@ -23,7 +23,6 @@
     <BlazorLinkerDescriptor Include="linker.xml" />
     <PackageReference Include="Bolero" Version="0.24.39" />
     <PackageReference Include="Bolero.FSharp.Compiler.Service" Version="1.0.0" />
-    <PackageReference Include="FSharp.Data.Http" Version="6.6.0" />
     <Content Update="wwwroot/*.json">
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </Content>

@@ -49,7 +49,7 @@ let update (js: IJSInProcessRuntime) http message model =
     match message with
     | InitializeCompiler ->
         model, Cmd.OfAsync.either (fun src -> async {
-            Compiler.SetFSharpDataHttpClient http
+            Compiler.SetEnvHttpClient http
             return! Compiler.Create http src |> Async.WithYield
         }) Main.defaultSource CompilerInitialized Error
     | CompilerInitialized compiler ->
