@@ -86,6 +86,7 @@ module Compiler =
             "--target:exe"
             inFile
             // Necessary standard library
+            "-r:/tmp/System.Private.CoreLib.dll"
             "-r:/tmp/FSharp.Core.dll"
             "-r:/tmp/mscorlib.dll"
             "-r:/tmp/netstandard.dll"
@@ -98,14 +99,14 @@ module Compiler =
             "-r:/tmp/System.Net.Http.dll"
             "-r:/tmp/System.Threading.dll"
             "-r:/tmp/System.Threading.Tasks.dll"
-            "-r:/tmp/FSharp.Data.dll"
             "-r:/tmp/System.Xml.Linq.dll"
             "-r:/tmp/WebFsc.Env.dll"
             "-o:" + outFile
         |])
 
     let referenceFiles =
-        [ "FSharp.Core.dll"
+        [ "System.Private.CoreLib.dll"
+          "FSharp.Core.dll"
           "mscorlib.dll"
           "netstandard.dll"
           "System.dll"
@@ -116,7 +117,6 @@ module Compiler =
           "System.Net.Http.dll"
           "System.Threading.dll"
           "System.Threading.Tasks.dll"
-          "FSharp.Data.dll"
           "System.Xml.Linq.dll"
           "WebFsc.Env.dll" ]
 
@@ -195,7 +195,7 @@ module Compiler =
         with exn -> eprintfn "%A" exn
 
     /// <summary>
-    /// Set the HttpClient used by FSharp.Data and by user code.
+    /// Set the HttpClient used by user code.
     /// </summary>
     /// <param name="http"></param>
     let SetFSharpDataHttpClient http =
