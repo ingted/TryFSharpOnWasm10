@@ -23,6 +23,7 @@ open FSharp.Compiler.EditorServices
 open FSharp.Compiler.Text
 open System
 open System.IO
+open System.Net.Http
 open System.Reflection
 //open Microsoft.FSharp.Compiler
 //open Microsoft.FSharp.Compiler.SourceCodeServices
@@ -103,11 +104,61 @@ module Compiler =
             "-o:" + outFile
         |])
 
+    let referenceFiles =
+        [ "FSharp.Core.dll"
+          "mscorlib.dll"
+          "netstandard.dll"
+          "System.dll"
+          "System.Core.dll"
+          "System.IO.dll"
+          "System.Numerics.dll"
+          "System.Runtime.dll"
+          "System.Net.Http.dll"
+          "System.Threading.dll"
+          "System.Threading.Tasks.dll"
+          "FSharp.Data.dll"
+          "System.Xml.Linq.dll"
+          "WebFsc.Env.dll" ]
+
+    let tryDownload (http: HttpClient) (url: string) = async {
+        try
+            use! response = http.GetAsync(url) |> Async.AwaitTask
+            if response.IsSuccessStatusCode then
+                let! bytes = response.Content.ReadAsByteArrayAsync() |> Async.AwaitTask
+                return Some bytes
+            else
+                return None
+        with _ ->
+            return None
+    }
+
+    let ensureReferenceFile (http: HttpClient) (fileName: string) = async {
+        let targetPath = Path.Combine("/tmp", fileName)
+        if not (File.Exists(targetPath)) then
+            Directory.CreateDirectory("/tmp") |> ignore
+            let! bytes =
+                async {
+                    let! fromRefs = tryDownload http ("refs/" + fileName)
+                    match fromRefs with
+                    | Some bytes -> return Some bytes
+                    | None -> return! tryDownload http ("_framework/" + fileName)
+                }
+            match bytes with
+            | Some bytes -> File.WriteAllBytes(targetPath, bytes)
+            | None -> eprintfn "Missing reference %s from /refs or /_framework" fileName
+    }
+
+    let ensureReferences (http: HttpClient) = async {
+        for fileName in referenceFiles do
+            do! ensureReferenceFile http fileName
+    }
+
     /// <summary>
     /// Create a compiler instance.
     /// </summary>
     /// <param name="source">The initial contents of Main.fs</param>
-    let Create (source:string) = async {
+    let Create (http: HttpClient) (source:string) = async {
+        do! ensureReferences http
         let checker = FSharpChecker.Create(keepAssemblyContents = true)
         let options = Options checker outFile
         File.WriteAllText(inFile, source)

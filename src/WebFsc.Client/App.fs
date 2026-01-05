@@ -50,7 +50,7 @@ let update (js: IJSInProcessRuntime) http message model =
     | InitializeCompiler ->
         model, Cmd.OfAsync.either (fun src -> async {
             Compiler.SetFSharpDataHttpClient http
-            return! Compiler.Create src |> Async.WithYield
+            return! Compiler.Create http src |> Async.WithYield
         }) Main.defaultSource CompilerInitialized Error
     | CompilerInitialized compiler ->
         let snippetId = js.GetQueryParam "snippet"

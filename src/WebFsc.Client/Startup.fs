@@ -25,18 +25,11 @@ open Microsoft.Extensions.DependencyInjection
 
 module Program =
 
-    let baseAddress =
-#if DEBUG
-        "http://localhost:8080/"
-#else
-        "https://tryfsharp.fsbolero.io/"
-#endif
-
     [<EntryPoint>]
     let Main args =
         let builder = WebAssemblyHostBuilder.CreateDefault(args)
         // TODO Why doesn't AddBaseAddressHttpClient work?
-        builder.Services.AddSingleton(new HttpClient(BaseAddress = Uri(baseAddress)))
+        builder.Services.AddSingleton(new HttpClient(BaseAddress = Uri(builder.HostEnvironment.BaseAddress)))
         |> ignore
         // builder.Services.AddBaseAddressHttpClient() |> ignore
         builder.RootComponents.Add<App.MainApp>("#main")

@@ -38,6 +38,15 @@ type Startup() =
         else
             None
 
+    let tryFindBuiltOutputRoot (basePath: string) =
+        if Directory.Exists(basePath) then
+            Directory.EnumerateDirectories(basePath)
+            |> Seq.tryPick (fun tfmPath ->
+                let probe = Path.Combine(tfmPath, "FSharp.Core.dll")
+                if File.Exists(probe) then Some tfmPath else None)
+        else
+            None
+
     let getClientWwwRoot () =
         let envPath = Environment.GetEnvironmentVariable("WEBFSC_CLIENT_WWWROOT")
         let hasEnvPath =
@@ -50,6 +59,20 @@ type Startup() =
                   Path.Combine(clientProjPath, "bin", "Release") ]
                 |> Seq.tryPick tryFindBuiltWwwRoot
             defaultArg builtWwwRoot (Path.Combine(clientProjPath, "wwwroot"))
+
+    let getClientOutputRoot (clientWwwRoot: string) =
+        let tryParent =
+            match Directory.GetParent(clientWwwRoot) with
+            | null -> None
+            | parent ->
+                let probe = Path.Combine(parent.FullName, "FSharp.Core.dll")
+                if File.Exists(probe) then Some parent.FullName else None
+        match tryParent with
+        | Some _ -> tryParent
+        | None ->
+            [ Path.Combine(clientProjPath, "bin", "Debug")
+              Path.Combine(clientProjPath, "bin", "Release") ]
+            |> Seq.tryPick tryFindBuiltOutputRoot
 
     let tryFindStaticWebAssetsManifest () =
         let objPath = Path.Combine(clientProjPath, "obj")
@@ -88,6 +111,7 @@ type Startup() =
     member this.Configure(app: IApplicationBuilder, env: IWebHostEnvironment) =
         let clientWwwRoot = getClientWwwRoot()
         let clientFileProvider = new PhysicalFileProvider(clientWwwRoot)
+        let clientOutputRoot = getClientOutputRoot clientWwwRoot
         let webRootFileProvider =
             new CompositeFileProvider(clientFileProvider, env.WebRootFileProvider)
         env.WebRootFileProvider <- webRootFileProvider
@@ -98,6 +122,8 @@ type Startup() =
                 "Client WebAssembly assets not found. Build WebFsc.Client to generate wwwroot/_framework or set WEBFSC_CLIENT_WWWROOT.")
         if List.isEmpty packageContentRoots then
             Console.WriteLine("No static web assets manifest found for client packages.")
+        if Option.isNone clientOutputRoot then
+            Console.WriteLine("Client reference assemblies not found. Build WebFsc.Client to enable /refs.")
 
         let frameworkPath = Path.Combine(clientWwwRoot, "_framework")
         let app: IApplicationBuilder =
@@ -120,6 +146,17 @@ type Startup() =
                         FileProvider = new PhysicalFileProvider(contentRoot),
                         RequestPath = requestPath))
             ) app
+
+        let app =
+            match clientOutputRoot with
+            | Some outputRoot ->
+                app.UseStaticFiles(
+                    StaticFileOptions(
+                        ContentTypeProvider = contentTypeProvider,
+                        FileProvider = new PhysicalFileProvider(outputRoot),
+                        RequestPath = PathString("/refs")))
+            | None ->
+                app
 
         app.UseStaticFiles(
                 StaticFileOptions(
