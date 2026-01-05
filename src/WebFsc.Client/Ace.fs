@@ -46,9 +46,9 @@ type Annotation =
 let SetAnnotations (js: IJSInProcessRuntime) (messages: FSharpDiagnostic[]) =
     let annotations = messages |> Array.map (fun info ->
         {
-            row = info.StartLineAlternate - 1
+            row = info.StartLine - 1
             column = info.StartColumn
-            y2 = info.EndLineAlternate - 1
+            y2 = info.EndLine - 1
             x2 = info.EndColumn
             text = info.Message
             ``type`` =
@@ -62,6 +62,6 @@ let SetAnnotations (js: IJSInProcessRuntime) (messages: FSharpDiagnostic[]) =
 /// Focus the editor and select the code range of the given message.
 let SelectMessage (js: IJSInProcessRuntime) (info: FSharpDiagnostic) =
     js.Invoke<unit>("WebFsc.selectRange",
-        info.StartLineAlternate - 1, info.StartColumn,
-        info.EndLineAlternate - 1, info.EndColumn
+        info.StartLine - 1, info.StartColumn,
+        info.EndLine - 1, info.EndColumn
     )

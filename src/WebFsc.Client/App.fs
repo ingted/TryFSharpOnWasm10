@@ -25,7 +25,6 @@ open Microsoft.JSInterop
 open Elmish
 open Bolero
 open Bolero.Html
-open Bolero.Templating.Client
 
 type AppModel =
     /// The app is initializing (show a loading screen).
@@ -43,10 +42,13 @@ type AppMessage =
 let sourceDuringLoad snippetId =
     if Option.isSome snippetId then "" else Main.defaultSource
 
+let cmdOfEffect (effect: Dispatch<'msg> -> unit) : Cmd<'msg> =
+    [ effect ]
+
 let update (js: IJSInProcessRuntime) http message model =
     match message with
     | InitializeCompiler ->
-        model, Cmd.ofAsync (fun src -> async {
+        model, Cmd.OfAsync.either (fun src -> async {
             Compiler.SetFSharpDataHttpClient http
             return! Compiler.Create src |> Async.WithYield
         }) Main.defaultSource CompilerInitialized Error
@@ -58,7 +60,7 @@ let update (js: IJSInProcessRuntime) http message model =
         Cmd.ofMsg (InitializeEditor snippetId)
     | InitializeEditor snippetId ->
         model,
-        Cmd.ofSub(fun dispatch ->
+        [ fun dispatch ->
             let onEdit = dispatch << Message << Main.SetText
             js.Invoke<unit>("WebFsc.initAce", "editor",
                 sourceDuringLoad snippetId,
@@ -67,7 +69,7 @@ let update (js: IJSInProcessRuntime) http message model =
             let onSetSnippet = dispatch << Message << Main.LoadSnippet << Option.defaultValue Main.defaultSnippetId << Option.ofObj
             Option.iter onSetSnippet snippetId
             js.ListenToQueryParam("snippet", onSetSnippet)
-        )
+        ]
     | Message msg ->
         match model with
         | Initializing -> model, [] // Shouldn't happen
@@ -93,7 +95,4 @@ type MainApp() =
         Program.mkProgram
             (fun _ -> Initializing, Cmd.ofMsg InitializeCompiler)
             (update (this.JSRuntime :?> _) this.Http) view
-#if DEBUG
-        |> Program.withHotReload
-#endif
 

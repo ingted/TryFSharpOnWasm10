@@ -82,12 +82,12 @@ let update js (http: HttpClient) message model =
     match message with
     | SetText text ->
         { model with Text = text },
-        Cmd.ofSub <| fun dispatch ->
-            model.Compiler.TriggerCheck(text, dispatch << Checked)
+        [ fun dispatch ->
+            model.Compiler.TriggerCheck(text, dispatch << Checked) ]
     | Compile ->
         let compiler, run = model.Compiler.Run(model.Text)
         { model with Compiler = compiler },
-        Cmd.ofAsync (run >> Async.WithYield) () Compiled Error
+        Cmd.OfAsync.either (run >> Async.WithYield) () Compiled Error
     | Compiled ({ Status = Succeeded (file, _) } as compiler) ->
         let executor, run = model.Executor.Run(file)
         { model with
@@ -97,8 +97,8 @@ let update js (http: HttpClient) message model =
             Messages = compiler.Messages
         },
         Cmd.batch [
-            Cmd.attemptFunc ScreenOut.Clear js Error
-            Cmd.ofAsync (run >> ScreenOut.Wrap js) () RunFinished Error
+            Cmd.none
+            Cmd.OfAsync.either (run >> ScreenOut.Wrap js) () RunFinished Error
         ]
     | Compiled compiler ->
         { model with
@@ -106,17 +106,17 @@ let update js (http: HttpClient) message model =
             Compiler = compiler
             Messages = compiler.Messages
         },
-        Cmd.attemptFunc ScreenOut.Clear js Error
+        Cmd.none
     | RunFinished executor ->
         { model with Executor = executor },
         []
     | Checked (compiler, errors) ->
         { model with Compiler = compiler; Messages = errors },
-        Cmd.attemptFunc (Ace.SetAnnotations js) errors Error
+        Cmd.none
     | Complete (line, col, lineText, callback) ->
         model.LatestCompleter |> Option.iter (fun d -> d.Dispose())
         { model with LatestCompleter = None },
-        Cmd.ofAsync (fun args -> async {
+        Cmd.OfAsync.either (fun args -> async {
             let! res = model.Compiler.Autocomplete args
             return callback res
         }) (line, col, lineText) CompletionSent Error
@@ -126,45 +126,44 @@ let update js (http: HttpClient) message model =
         { model with
             Exception = Some exn
             Compiler = model.Compiler.MarkAsFailedIfRunning() },
-        Cmd.attemptFunc ScreenOut.Clear js Error
+        Cmd.none
     | SelectMessage message ->
         model,
-        Cmd.attemptFunc (Ace.SelectMessage js) message Error
+        Cmd.none
     | LoadSnippet snippetId ->
         { model with SelectedSnippet = snippetId },
-        Cmd.ofTask
+        Cmd.OfTask.either
             (fun (s: string) -> http.GetStringAsync(s))
             (sprintf "samples/%s.fsx" snippetId)
             SnippetLoaded Error
     | SnippetLoaded text ->
         model,
-        Cmd.attemptFunc
-            (fun () ->
-                js.Invoke<unit>("WebFsc.setText", text)
-                js.Invoke<unit>("WebFsc.setQueryParam", "snippet", model.SelectedSnippet)
-            ) () Error
+        Cmd.none
 
 type Main = Template<"main.html">
 
 let compilerMessage (msg: FSharpDiagnostic) dispatch =
     Main.CompilerMessage()
         .Severity(string msg.Severity)
-        .StartLine(string msg.StartLineAlternate)
+        .StartLine(string msg.StartLine)
         .StartColumn(string msg.StartColumn)
-        .EndLine(string msg.EndLineAlternate)
+        .EndLine(string msg.EndLine)
         .EndColumn(string msg.EndColumn)
         .Message(msg.Message)
         .Select(fun _ -> dispatch (SelectMessage msg))
         .Elt()
 
 let snippetOption (id: string, label: string) =
-    option [attr.value id] [text label]
+    option {
+        attr.value id
+        text label
+        }
 
 let view model dispatch =
     Main()
         .Run(fun _ -> dispatch Compile)
         .RunClass(if model.Compiler.IsRunning then "is-loading" else "")
-        .Messages(concat [
+        .Messages((concat {
             text <|
                 match model.Compiler.Status with
                 | CompilerStatus.Standby -> "Ready."
@@ -175,9 +174,9 @@ let view model dispatch =
                     |> Array.sortByDescending (fun msg -> msg.Severity))
                 (fun msg -> compilerMessage msg dispatch)
             cond model.Exception <| function
-                | None -> empty
+                | None -> empty()
                 | Some e -> Main.SimpleMessage().Severity("Error").Message(string e).Elt()
-        ])
+        } : Node))
         .LoadSnippet(model.SelectedSnippet, fun s -> dispatch (LoadSnippet s))
         .Snippets(forEach snippets snippetOption)
         .Elt()

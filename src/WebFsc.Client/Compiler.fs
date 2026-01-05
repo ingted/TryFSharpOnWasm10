@@ -20,6 +20,7 @@ namespace WebFsc.Client
 open FSharp.Compiler.CodeAnalysis
 open FSharp.Compiler.Diagnostics
 open FSharp.Compiler.EditorServices
+open FSharp.Compiler.Text
 open System
 open System.IO
 open System.Reflection
@@ -113,7 +114,8 @@ module Compiler =
         let! checkRes = checker.ParseAndCheckProject(options)
         let! fileRes = checker.GetBackgroundCheckResultsForFileInProject(inFile, options)
         // The first compilation takes longer, so we run one during load
-        let! _ = checker.Compile(checkRes)
+        let args = Array.append options.OtherOptions options.SourceFiles
+        let! _ = checker.Compile(args)
         return {
             Checker = checker
             Options = options
@@ -146,14 +148,6 @@ module Compiler =
     /// </summary>
     /// <param name="http"></param>
     let SetFSharpDataHttpClient http =
-        // Set the FSharp.Data run time HttpClient
-        FSharp.Data.Http.Client <- http
-        // Set the FSharp.Data design time HttpClient
-        let asm = System.Reflection.Assembly.LoadFrom("/tmp/FSharp.Data.DesignTime.dll")
-        let ty = asm.GetType("FSharp.Data.Http")
-        let prop = ty.GetProperty("Client", BindingFlags.Static ||| BindingFlags.Public)
-        prop.GetSetMethod().Invoke(null, [|http|])
-        |> ignore
         // Set the user run time HttpClient
         Env.SetHttp http
 
@@ -209,14 +203,15 @@ type Compiler with
             // We need to recompute the options because we're changing the out file
             let options = Compiler.Options comp.Checker outFile
             let! checkRes = comp.Checker.ParseAndCheckProject(options)
-            if IsFailure checkRes.Errors then return { comp with Status = Failed checkRes.Errors } else
-            let! errors, outCode = comp.Checker.Compile(checkRes)
+            if IsFailure checkRes.Diagnostics then return { comp with Status = Failed checkRes.Diagnostics } else
+            let args = Array.append options.OtherOptions options.SourceFiles
+            let! (errors: FSharpDiagnostic[]), (outCode: exn option) = comp.Checker.Compile(args)
             let finish = DateTime.Now
             printfn "Compiled in %A" (finish - start)
             let errors =
-                Array.append checkRes.Errors errors
+                Array.append checkRes.Diagnostics errors
                 |> filterNoMainMessage checkRes
-            if IsFailure errors || outCode <> 0 then return { comp with Status = Failed errors } else
+            if IsFailure errors || Option.isSome outCode then return { comp with Status = Failed errors } else
             return
                 { comp with
                     Sequence = comp.Sequence + 1
@@ -231,14 +226,14 @@ type Compiler with
     /// <param name="dispatch">The callback to dispatch the results</param>
     member comp.TriggerCheck(source: string, dispatch: Compiler * FSharpDiagnostic[] -> unit) =
         checkDelay.Trigger(async {
-            let! parseRes, checkRes = comp.Checker.ParseAndCheckFileInProject(inFile, 0, source, comp.Options)
+            let! parseRes, checkRes = comp.Checker.ParseAndCheckFileInProject(inFile, 0, SourceText.ofString source, comp.Options)
             let checkRes =
                 match checkRes with
                 | FSharpCheckFileAnswer.Succeeded res -> res
                 | FSharpCheckFileAnswer.Aborted -> comp.MainFile.Check
             dispatch
                 ({ comp with MainFile = FileResults.OfRes (parseRes, checkRes) },
-                Array.append parseRes.Errors checkRes.Errors)
+                Array.append parseRes.Diagnostics checkRes.Diagnostics)
         })
 
     /// <summary>
@@ -249,7 +244,7 @@ type Compiler with
     /// <param name="lineText">The text of the line that has changed</param>
     member comp.Autocomplete(line: int, col: int, lineText: string) = async {
         let partialName = QuickParse.GetPartialLongNameEx(lineText, col)
-        let! res = comp.MainFile.Check.GetDeclarationListInfo(Some comp.MainFile.Parse, line, lineText, partialName)
+        let res = comp.MainFile.Check.GetDeclarationListInfo(Some comp.MainFile.Parse, line, lineText, partialName)
         return res.Items
     }
 

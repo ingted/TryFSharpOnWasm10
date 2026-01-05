@@ -47,7 +47,7 @@ and CompletionCache(items: DeclarationListItem[], js: IJSInProcessRuntime) =
         | None ->
             async {
                 // 1. 注意 TooltipText 的大小寫（現在通常是小寫 t）
-                let! (ToolTipText ttitems) = items.[index].DescriptionTextAsync
+                let (ToolTipText ttitems) = items.[index].Description
                 let tt = String.concat "\n" <| seq {
                     for ttitem in ttitems do
                         match ttitem with
