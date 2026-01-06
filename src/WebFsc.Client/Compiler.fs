@@ -85,9 +85,9 @@ module Compiler =
             "--fullpaths"
             "--warn:3"
             "--target:exe"
-            "--targetprofile:netcore"
-            inFile
+            //"--targetprofile:netcore"
             // Necessary standard library
+            "-r:/tmp/mscorlib.dll"
             "-r:/tmp/FSharp.Core.dll"
             "-r:/tmp/System.Private.CoreLib.dll"
             "-r:/tmp/netstandard.dll"
@@ -105,6 +105,7 @@ module Compiler =
             "-r:/tmp/System.Threading.Tasks.dll"
             "-r:/tmp/System.Xml.Linq.dll"
             "-r:/tmp/WebFsc.Env.dll"
+            inFile
             "-o:" + outFile
         |])
 

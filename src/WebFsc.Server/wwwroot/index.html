@@ -13,7 +13,7 @@
   <body>
     <div id="main">
       <div class="loading-wrapper">
-        <img src="img/wasm-fsharp.png">
+        <!--<img src="img/wasm-fsharp.png">-->
         <div><span class="loader"></span> Downloading...</div>
       </div>
     </div>
@@ -21,6 +21,33 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/ace/1.4.2/ext-language_tools.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/split.js/1.5.9/split.min.js"></script>
     <script src="js/index.js"></script>
-    <script src="_framework/blazor.webassembly.js"></script>
+    <script src="_framework/blazor.webassembly.js" autostart="false"></script>
+    <script>
+      (function () {
+        function shouldLog(name) {
+          return name && (name.indexOf("mscorlib") >= 0 || name.indexOf("System.Private.CoreLib") >= 0);
+        }
+
+        Blazor.start({
+          loadBootResource: function (type, name, defaultUri) {
+            if (shouldLog(name)) {
+              console.log("[boot] " + type + " " + name + " -> " + defaultUri);
+            }
+
+            if (type === "dotnetjs") {
+              return defaultUri;
+            }
+
+            return fetch(defaultUri, { cache: "no-cache" })
+              .then(function (resp) {
+                if (!resp.ok) {
+                  throw new Error("Failed to load " + defaultUri + " (" + resp.status + ")");
+                }
+                return resp;
+              });
+          }
+        });
+      })();
+    </script>
   </body>
 </html>

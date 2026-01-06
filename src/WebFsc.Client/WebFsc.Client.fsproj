@@ -10,6 +10,7 @@
     <WasmEnableHotReload>false</WasmEnableHotReload>
   </PropertyGroup>
   <ItemGroup>
+    <None Include="Sync-ServerWwwroot.ps1" />
     <Compile Include="Utilities.fs" />
     <Compile Include="Executor.fs" />
     <Compile Include="Ace.fs" />
@@ -43,4 +44,6 @@
   <PropertyGroup>
     <_BlazorCopyFilesToOutputDirectoryDependsOn>$(_BlazorCopyFilesToOutputDirectoryDependsOn);CopyCustomBlazor</_BlazorCopyFilesToOutputDirectoryDependsOn>
   </PropertyGroup>
+
+
 </Project>
