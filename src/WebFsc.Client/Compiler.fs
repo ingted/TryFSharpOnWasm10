@@ -25,6 +25,7 @@ open System
 open System.IO
 open System.Net.Http
 open System.Reflection
+open System.Runtime.InteropServices
 //open Microsoft.FSharp.Compiler
 //open Microsoft.FSharp.Compiler.SourceCodeServices
 open Microsoft.JSInterop
@@ -84,18 +85,20 @@ module Compiler =
             "--fullpaths"
             "--warn:3"
             "--target:exe"
-            "--targetprofile:netstandard"
+            "--targetprofile:netcore"
             inFile
             // Necessary standard library
             "-r:/tmp/FSharp.Core.dll"
-            "-r:/tmp/mscorlib.dll"
             "-r:/tmp/System.Private.CoreLib.dll"
             "-r:/tmp/netstandard.dll"
             "-r:/tmp/System.dll"
             "-r:/tmp/System.Core.dll"
+            "-r:/tmp/System.Collections.dll"
+            "-r:/tmp/System.Console.dll"
             "-r:/tmp/System.IO.dll"
             "-r:/tmp/System.Numerics.dll"
             "-r:/tmp/System.Runtime.dll"
+            "-r:/tmp/System.Runtime.Extensions.dll"
             // Additional libraries we want to make available
             "-r:/tmp/System.Net.Http.dll"
             "-r:/tmp/System.Threading.dll"
@@ -107,14 +110,16 @@ module Compiler =
 
     let referenceFiles =
         [ "FSharp.Core.dll"
-          "mscorlib.dll"
           "System.Private.CoreLib.dll"
           "netstandard.dll"
           "System.dll"
           "System.Core.dll"
+          "System.Collections.dll"
+          "System.Console.dll"
           "System.IO.dll"
           "System.Numerics.dll"
           "System.Runtime.dll"
+          "System.Runtime.Extensions.dll"
           "System.Net.Http.dll"
           "System.Threading.dll"
           "System.Threading.Tasks.dll"
@@ -159,15 +164,27 @@ module Compiler =
     /// </summary>
     /// <param name="source">The initial contents of Main.fs</param>
     let Create (http: HttpClient) (source:string) = async {
+        let isBrowser =
+            RuntimeInformation.IsOSPlatform(OSPlatform.Create("BROWSER"))
+            || Environment.GetEnvironmentVariable("FCS_BROWSER") = "1"
+        printfn "Compiler.Create: ensureReferences"
         do! ensureReferences http
+        printfn "Compiler.Create: references ready"
         let checker = FSharpChecker.Create(keepAssemblyContents = true)
         let options = Options checker outFile
         File.WriteAllText(inFile, source)
+        printfn "Compiler.Create: ParseAndCheckProject"
         let! checkRes = checker.ParseAndCheckProject(options)
+        printfn "Compiler.Create: GetBackgroundCheckResultsForFileInProject"
         let! fileRes = checker.GetBackgroundCheckResultsForFileInProject(inFile, options)
         // The first compilation takes longer, so we run one during load
-        let args = Array.append options.OtherOptions options.SourceFiles
-        let! _ = checker.Compile(args)
+        if not isBrowser then
+            let args = Array.append options.OtherOptions options.SourceFiles
+            printfn "Compiler.Create: warmup compile"
+            let! _ = checker.Compile(args)
+            printfn "Compiler.Create: warmup compile done"
+        else
+            printfn "Compiler.Create: skip warmup compile in browser"
         return {
             Checker = checker
             Options = options

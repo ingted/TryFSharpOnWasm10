@@ -19,6 +19,7 @@
 /// MVU for the full application, including loading screen.
 module WebFsc.Client.App
 
+open System
 open System.Net.Http
 open Microsoft.AspNetCore.Components
 open Microsoft.JSInterop
@@ -49,6 +50,8 @@ let update (js: IJSInProcessRuntime) http message model =
     match message with
     | InitializeCompiler ->
         model, Cmd.OfAsync.either (fun src -> async {
+            Environment.SetEnvironmentVariable("FSharp_CacheEvictionImmediate", "1")
+            Environment.SetEnvironmentVariable("FCS_BROWSER", "1")
             Compiler.SetEnvHttpClient http
             return! Compiler.Create http src |> Async.WithYield
         }) Main.defaultSource CompilerInitialized Error
