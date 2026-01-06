@@ -28,6 +28,39 @@
           return name && (name.indexOf("mscorlib") >= 0 || name.indexOf("System.Private.CoreLib") >= 0);
         }
 
+        function forceFetchMscorlib() {
+          var dotnetJsUrl = "_framework/dotnet.js";
+          return fetch(dotnetJsUrl, { cache: "no-cache" })
+            .then(function (resp) {
+              if (!resp.ok) {
+                throw new Error("Failed to load " + dotnetJsUrl + " (" + resp.status + ")");
+              }
+              return resp.text();
+            })
+            .then(function (text) {
+              var match = /"virtualPath"\s*:\s*"mscorlib\.wasm"[\s\S]*?"name"\s*:\s*"([^"]+)"/.exec(text);
+              if (!match) {
+                console.warn("[mscorlib] entry not found in dotnet.js");
+                return null;
+              }
+              var name = match[1];
+              var url = "_framework/" + name;
+              console.log("[mscorlib] prefetch " + url);
+              return fetch(url, { cache: "no-cache" });
+            })
+            .then(function (resp) {
+              if (resp && !resp.ok) {
+                throw new Error("Failed to load mscorlib (" + resp.status + ")");
+              }
+              if (resp) {
+                console.log("[mscorlib] prefetch complete");
+              }
+            })
+            .catch(function (err) {
+              console.warn("[mscorlib] prefetch failed", err);
+            });
+        }
+
         Blazor.start({
           loadBootResource: function (type, name, defaultUri) {
             if (shouldLog(name)) {
@@ -47,6 +80,7 @@
               });
           }
         });
+        forceFetchMscorlib();
       })();
     </script>
   </body>

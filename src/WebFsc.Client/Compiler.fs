@@ -111,6 +111,7 @@ module Compiler =
 
     let referenceFiles =
         [ "FSharp.Core.dll"
+          "mscorlib.dll"
           "System.Private.CoreLib.dll"
           "netstandard.dll"
           "System.dll"
