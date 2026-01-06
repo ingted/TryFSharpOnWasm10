@@ -5,7 +5,7 @@ var e=!1;const t=async()=>WebAssembly.validate(new Uint8Array([0,97,115,109,1,0,
   "mainAssemblyName": "WebFsc.Client",
   "applicationEnvironment": "Development",
   "resources": {
-    "hash": "sha256-eEgXPCzD0IqPr4tlHpqgBCUoILhDJcIiFSZrmfUU2rc=",
+    "hash": "sha256-sI8sa6FHHyk7lRK4zoBH7DgPhEBWCoOlkrawPx6GsEU=",
     "jsModuleNative": [
       {
         "name": "dotnet.native.cs8mcre4gh.js"
@@ -1079,8 +1079,8 @@ var e=!1;const t=async()=>WebAssembly.validate(new Uint8Array([0,97,115,109,1,0,
       },
       {
         "virtualPath": "WebFsc.Client.wasm",
-        "name": "WebFsc.Client.xuixp1ox7r.wasm",
-        "integrity": "sha256-ufrFb46T/u4bBtyPnlpJaTXDEFuI/6+XN9vl7EugE0Q="
+        "name": "WebFsc.Client.rbvx4tb0p7.wasm",
+        "integrity": "sha256-KRuCkZWcH6X8ZPlj6zDK0m78jYcJ32tIEsYFOLrLYYU="
       }
     ],
     "pdb": [
@@ -1101,8 +1101,8 @@ var e=!1;const t=async()=>WebAssembly.validate(new Uint8Array([0,97,115,109,1,0,
       },
       {
         "virtualPath": "WebFsc.Client.pdb",
-        "name": "WebFsc.Client.euw59vmv95.pdb",
-        "integrity": "sha256-eiWZAtY+AE7JD3URE8nHE5B0Sr5SJTXIJduQbcvFg1k="
+        "name": "WebFsc.Client.s1a2wzxikg.pdb",
+        "integrity": "sha256-oETwW604l0egaZszdYJxXuRXjhVABgupKIfWwVddNQM="
       }
     ],
     "satelliteResources": {

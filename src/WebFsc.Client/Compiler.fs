@@ -85,7 +85,7 @@ module Compiler =
             "--fullpaths"
             "--warn:3"
             "--target:exe"
-            //"--targetprofile:netcore"
+            "--targetprofile:netstandard"
             // Necessary standard library
             "-r:/tmp/mscorlib.dll"
             "-r:/tmp/FSharp.Core.dll"
@@ -98,9 +98,12 @@ module Compiler =
             "-r:/tmp/System.IO.dll"
             "-r:/tmp/System.Numerics.dll"
             "-r:/tmp/System.Runtime.dll"
+            "-r:/tmp/System.Runtime.Numerics.dll"
             "-r:/tmp/System.Runtime.Extensions.dll"
             // Additional libraries we want to make available
             "-r:/tmp/System.Net.Http.dll"
+            "-r:/tmp/System.Net.Requests.dll"
+            "-r:/tmp/System.Net.WebClient.dll"
             "-r:/tmp/System.Threading.dll"
             "-r:/tmp/System.Threading.Tasks.dll"
             "-r:/tmp/System.Xml.Linq.dll"
@@ -111,8 +114,8 @@ module Compiler =
 
     let referenceFiles =
         [ "FSharp.Core.dll"
-          "mscorlib.dll"
           "System.Private.CoreLib.dll"
+          "mscorlib.dll"
           "netstandard.dll"
           "System.dll"
           "System.Core.dll"
@@ -121,8 +124,11 @@ module Compiler =
           "System.IO.dll"
           "System.Numerics.dll"
           "System.Runtime.dll"
+          "System.Runtime.Numerics.dll"
           "System.Runtime.Extensions.dll"
           "System.Net.Http.dll"
+          "System.Net.Requests.dll"
+          "System.Net.WebClient.dll"
           "System.Threading.dll"
           "System.Threading.Tasks.dll"
           "System.Xml.Linq.dll"
