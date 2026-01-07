@@ -1,4 +1,4 @@
-# Try F# on WebAssembly
+# Try F# on WebAssembly (Already migrated from netcoreapp3.1 to net10.0)
 
 [![Build status](https://ci.appveyor.com/api/projects/status/mw21lo0uhu19fkfi?svg=true)](https://ci.appveyor.com/project/IntelliFactory/tryfsharponwasm)
 
@@ -11,3 +11,11 @@ Uses Bolero - F# Tools for Blazor, see [website](https://fsbolero.io/) and [repo
 First run `install.ps1` in Powershell. Then you can open the solution in your IDE of choice.
 
 The server project `WebFsc.Server` is just here for developer convenience (hot reloading, MIME type for *.fsx); the actual deployed project is `WebFsc.Client`.
+
+Bolero FCS is here:
+
+https://github.com/ingted/Bolero.FCS.Build
+
+<img width="1899" height="1028" alt="Image" src="https://github.com/user-attachments/assets/0df180b1-2d64-4e2f-b504-ca1f0db7e5fd" />
+
+<img width="367" height="446" alt="Image" src="https://github.com/user-attachments/assets/53ad412c-76e4-4a13-a1b4-2a90a45a3fe1" />
