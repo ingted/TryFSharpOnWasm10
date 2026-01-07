@@ -12,6 +12,8 @@ Uses Bolero - F# Tools for Blazor, see [website](https://fsbolero.io/) and [repo
 
 Open the solution file with Visual Studio 2026+ (need to be supported .net 10) and git clone the Bolero FCS project, make sure the project reference is correct, then rebuild the `WebFsc.Server`.
 
+(The paket and ps1 usage for building the project are removed...)
+
 The server project `WebFsc.Server` is just here for developer convenience (hot reloading, MIME type for *.fsx); the actual deployed project is `WebFsc.Client`.
 
 Bolero FCS is here:
