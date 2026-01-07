@@ -23,6 +23,7 @@
     <Content Include="main.html" />
     <BlazorLinkerDescriptor Include="linker.xml" />
     <PackageReference Include="Bolero" Version="0.24.39" />
+    <PackageReference Include="FSharp.DependencyManager.Nuget" Version="37.0.0" />
     <Content Update="wwwroot/*.json">
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </Content>
@@ -30,7 +31,7 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="10.0.1" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Bolero.FCS.Build\src\Compiler\Bolero.FSharp.Compiler.Service.fsproj" />
+    <ProjectReference Include="..\..\..\Bolero.FCS.Build - Copy\src\Compiler\Bolero.FSharp.Compiler.Service.fsproj" />
     <ProjectReference Include="..\WebFsc.Env\WebFsc.Env.fsproj" />
   </ItemGroup>
   <Target Name="CopyCustomBlazor">

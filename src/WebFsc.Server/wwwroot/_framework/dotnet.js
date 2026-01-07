@@ -5,7 +5,7 @@ var e=!1;const t=async()=>WebAssembly.validate(new Uint8Array([0,97,115,109,1,0,
   "mainAssemblyName": "WebFsc.Client",
   "applicationEnvironment": "Development",
   "resources": {
-    "hash": "sha256-sI8sa6FHHyk7lRK4zoBH7DgPhEBWCoOlkrawPx6GsEU=",
+    "hash": "sha256-3iRE9ikI4asr+xFjePXOw2NBDagPtRfkjkiDUyW0YTY=",
     "jsModuleNative": [
       {
         "name": "dotnet.native.cs8mcre4gh.js"
@@ -71,6 +71,11 @@ var e=!1;const t=async()=>WebAssembly.validate(new Uint8Array([0,97,115,109,1,0,
         "virtualPath": "FSharp.Core.wasm",
         "name": "FSharp.Core.eacbpf42ur.wasm",
         "integrity": "sha256-CtgE9F/W44ecav366F4IeteBzlR9bCTYekru0PyNdN8="
+      },
+      {
+        "virtualPath": "FSharp.DependencyManager.Nuget.wasm",
+        "name": "FSharp.DependencyManager.Nuget.4dg5jst4hz.wasm",
+        "integrity": "sha256-6GoQokU2EwrBRvln92p4WZw51J8m1J+ekDFrNCPSqj4="
       },
       {
         "virtualPath": "FSharp.SystemTextJson.wasm",
@@ -1064,45 +1069,35 @@ var e=!1;const t=async()=>WebAssembly.validate(new Uint8Array([0,97,115,109,1,0,
       },
       {
         "virtualPath": "FSharp.Compiler.Service.wasm",
-        "name": "FSharp.Compiler.Service.89th42n7io.wasm",
-        "integrity": "sha256-pFXn8G0BwlDjl7RRBnFBZ0+M1XqWWEziNVw51mzfpFU="
-      },
-      {
-        "virtualPath": "FSharp.DependencyManager.Nuget.wasm",
-        "name": "FSharp.DependencyManager.Nuget.y1lqdghkjw.wasm",
-        "integrity": "sha256-Fmq6OexVVlAWLVyF/bgPMka95VZej0KDDJIBcIYgdak="
+        "name": "FSharp.Compiler.Service.y25da23jsl.wasm",
+        "integrity": "sha256-BiPlrfLO4o//Rf8X/3FLl+7bC9TYvXORbLqk4SNX4C4="
       },
       {
         "virtualPath": "WebFsc.Env.wasm",
-        "name": "WebFsc.Env.5b32m3b3ki.wasm",
-        "integrity": "sha256-Qa8x8CMTxrpt+5Mur0h6amjhcQwzFf0D5wfjDpp1xL0="
+        "name": "WebFsc.Env.mk5a8lg9p6.wasm",
+        "integrity": "sha256-tvYVYJyoZwMfcfCWGvdSirVfAnerVmi3+DE38JUv8ic="
       },
       {
         "virtualPath": "WebFsc.Client.wasm",
-        "name": "WebFsc.Client.rbvx4tb0p7.wasm",
-        "integrity": "sha256-KRuCkZWcH6X8ZPlj6zDK0m78jYcJ32tIEsYFOLrLYYU="
+        "name": "WebFsc.Client.co3elci10h.wasm",
+        "integrity": "sha256-5LDKtuxIl3Wh67rve+0C6JOSqANiDBQFugrr2Eow4vg="
       }
     ],
     "pdb": [
       {
         "virtualPath": "FSharp.Compiler.Service.pdb",
-        "name": "FSharp.Compiler.Service.bhux1ji3h1.pdb",
-        "integrity": "sha256-cToln+WXsMSqzoBGRV+P8Boq1401LPKTP9W4pBKZYLw="
-      },
-      {
-        "virtualPath": "FSharp.DependencyManager.Nuget.pdb",
-        "name": "FSharp.DependencyManager.Nuget.7ocgbfr8cd.pdb",
-        "integrity": "sha256-2SQCuMDPy+bcKBrb/hmE7A8XTjn44QvF8BajzqdM/h0="
+        "name": "FSharp.Compiler.Service.5c9t5p1zot.pdb",
+        "integrity": "sha256-ezLz2jrSPH6xnQeZtg6vq0KBtbxaf/kaDtuABPmwOos="
       },
       {
         "virtualPath": "WebFsc.Env.pdb",
-        "name": "WebFsc.Env.4b34buvo8i.pdb",
-        "integrity": "sha256-wPyUtNLJOG1XTi57p+Sk9QJNBm0QRYTdOi5mpcp8hBI="
+        "name": "WebFsc.Env.ipoifbsnps.pdb",
+        "integrity": "sha256-arc2tdIpb/zkv3SjbykJV7zgFnP4vU9aYuQWdKobrkQ="
       },
       {
         "virtualPath": "WebFsc.Client.pdb",
-        "name": "WebFsc.Client.s1a2wzxikg.pdb",
-        "integrity": "sha256-oETwW604l0egaZszdYJxXuRXjhVABgupKIfWwVddNQM="
+        "name": "WebFsc.Client.3k4kjlv0lo.pdb",
+        "integrity": "sha256-7VTDHANapsGjBR1lOpV0wFHfQegANZGItybuBK6R6zA="
       }
     ],
     "satelliteResources": {
@@ -1214,6 +1209,7 @@ var e=!1;const t=async()=>WebAssembly.validate(new Uint8Array([0,97,115,109,1,0,
         "System.ComponentModel.TypeConverter.EnableUnsafeBinaryFormatterInDesigntimeLicenseContextSerialization": false,
         "System.ComponentModel.TypeDescriptor.IsComObjectDescriptorSupported": false,
         "System.Data.DataSet.XmlSerializationIsSupported": false,
+        "System.Diagnostics.Debugger.IsSupported": false,
         "System.Diagnostics.Metrics.Meter.IsSupported": false,
         "System.Diagnostics.Tracing.EventSource.IsSupported": false,
         "System.GC.Server": true,

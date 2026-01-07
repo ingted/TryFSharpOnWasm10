@@ -53,6 +53,7 @@ let update (js: IJSInProcessRuntime) http message model =
             Environment.SetEnvironmentVariable("FSharp_CacheEvictionImmediate", "1")
             Environment.SetEnvironmentVariable("FCS_BROWSER", "1")
             Compiler.SetEnvHttpClient http
+            System.IO.File.WriteAllText("/default.win32manifest", "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?><assembly xmlns=\"urn:schemas-microsoft-com:asm.v1\" manifestVersion=\"1.0\"></assembly>")
             return! Compiler.Create http src |> Async.WithYield
         }) Main.defaultSource CompilerInitialized Error
     | CompilerInitialized compiler ->
