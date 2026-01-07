@@ -1,5 +1,7 @@
 # Try F# on WebAssembly (Already migrated from netcoreapp3.1 to net10.0)
 
+Official site: https://github.com/fsbolero/TryFSharpOnWasm
+
 [![Build status](https://ci.appveyor.com/api/projects/status/mw21lo0uhu19fkfi?svg=true)](https://ci.appveyor.com/project/IntelliFactory/tryfsharponwasm)
 
 This is the repository for the [Try F# on WebAssembly](https://tryfsharp.fsbolero.io) website.
