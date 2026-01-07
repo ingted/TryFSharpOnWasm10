@@ -16,6 +16,10 @@ Bolero FCS is here:
 
 https://github.com/ingted/Bolero.FCS.Build
 
+This Bolero FCS is based on commit: 6396a18a707b29f552373b8ff5650c98beb9bcfc of https://github.com/dotnet/fsharp
+Parallel compilation is removed...
+
 <img width="1899" height="1028" alt="Image" src="https://github.com/user-attachments/assets/0df180b1-2d64-4e2f-b504-ca1f0db7e5fd" />
 
 <img width="367" height="446" alt="Image" src="https://github.com/user-attachments/assets/53ad412c-76e4-4a13-a1b4-2a90a45a3fe1" />
+
